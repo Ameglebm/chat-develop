@@ -14,30 +14,15 @@ export class WebsocketService {
     return this.server;
   }
 
-  emit(
-    event: string,
-    data: unknown,
-  ) {
+  emit(event: string, data: unknown) {
     this.server.emit(event, data);
   }
 
-  emitToRoom(
-    room: string,
-    event: string,
-    data: unknown,
-  ) {
-    this.server
-      .to(room)
-      .emit(event, data);
+  emitToRoom(room: string, event: string, data: unknown) {
+    this.server.to(room).emit(event, data);
   }
 
-  emitToSocket(
-    socketId: string,
-    event: string,
-    data: unknown,
-  ) {
-    this.server
-      .to(socketId)
-      .emit(event, data);
+  emitToSocket(socketId: string, event: string, data: unknown) {
+    this.server.to(socketId).emit(event, data);
   }
 }

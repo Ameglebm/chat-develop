@@ -4,10 +4,7 @@ import {
   Scope,
 } from '@nestjs/common';
 
-import {
-  LOGGER_COLORS,
-  LOGGER_CONTEXT_THEMES,
-} from './logger.constants';
+import { LOGGER_COLORS, LOGGER_CONTEXT_THEMES } from './logger.constants';
 
 export enum LogLevel {
   SUCCESS = 'SUCCESS',
@@ -20,83 +17,38 @@ export enum LogLevel {
 @Injectable({
   scope: Scope.TRANSIENT,
 })
-export class LoggerService
-  implements NestLoggerService
-{
+export class LoggerService implements NestLoggerService {
   private context?: string;
 
   setContext(context: string) {
     this.context = context;
   }
 
-  log(
-    message: string,
-    metadata?: Record<string, any>,
-  ) {
-    this.writeLog(
-      LogLevel.INFO,
-      message,
-      metadata,
-    );
+  log(message: string, metadata?: Record<string, any>) {
+    this.writeLog(LogLevel.INFO, message, metadata);
   }
 
-  success(
-    message: string,
-    metadata?: Record<string, any>,
-  ) {
-    this.writeLog(
-      LogLevel.SUCCESS,
-      message,
-      metadata,
-    );
+  success(message: string, metadata?: Record<string, any>) {
+    this.writeLog(LogLevel.SUCCESS, message, metadata);
   }
 
-  warn(
-    message: string,
-    metadata?: Record<string, any>,
-  ) {
-    this.writeLog(
-      LogLevel.WARN,
-      message,
-      metadata,
-    );
+  warn(message: string, metadata?: Record<string, any>) {
+    this.writeLog(LogLevel.WARN, message, metadata);
   }
 
-  debug(
-    message: string,
-    metadata?: Record<string, any>,
-  ) {
-    this.writeLog(
-      LogLevel.DEBUG,
-      message,
-      metadata,
-    );
+  debug(message: string, metadata?: Record<string, any>) {
+    this.writeLog(LogLevel.DEBUG, message, metadata);
   }
 
-  verbose(
-    message: string,
-    metadata?: Record<string, any>,
-  ) {
-    this.writeLog(
-      LogLevel.DEBUG,
-      message,
-      metadata,
-    );
+  verbose(message: string, metadata?: Record<string, any>) {
+    this.writeLog(LogLevel.DEBUG, message, metadata);
   }
 
-  error(
-    message: string,
-    trace?: string,
-    metadata?: Record<string, any>,
-  ) {
-    this.writeLog(
-      LogLevel.ERROR,
-      message,
-      {
-        ...metadata,
-        ...(trace && { trace }),
-      },
-    );
+  error(message: string, trace?: string, metadata?: Record<string, any>) {
+    this.writeLog(LogLevel.ERROR, message, {
+      ...metadata,
+      ...(trace && { trace }),
+    });
   }
 
   private writeLog(
@@ -106,24 +58,16 @@ export class LoggerService
   ) {
     const c = LOGGER_COLORS;
 
-    const context =
-      this.context ?? 'ChatDevelop';
+    const context = this.context ?? 'ChatDevelop';
 
-    const theme =
-      LOGGER_CONTEXT_THEMES[
-        context
-      ] ?? {
-        badge: '◈',
-        color: c.gray,
-      };
+    const theme = LOGGER_CONTEXT_THEMES[context] ?? {
+      badge: '◈',
+      color: c.gray,
+    };
 
-    const levelStyle =
-      this.getLevelStyle(level);
+    const levelStyle = this.getLevelStyle(level);
 
-    const time = new Date()
-      .toISOString()
-      .split('T')[1]
-      .slice(0, 8);
+    const time = new Date().toISOString().split('T')[1].slice(0, 8);
 
     const lvl = level.padEnd(7);
 
@@ -138,18 +82,10 @@ export class LoggerService
     ].join(' ');
 
     const metaLine =
-      metadata &&
-      Object.keys(metadata).length > 0
-        ? `\n${JSON.stringify(
-            metadata,
-            null,
-            2,
-          )
+      metadata && Object.keys(metadata).length > 0
+        ? `\n${JSON.stringify(metadata, null, 2)
             .split('\n')
-            .map(
-              (line) =>
-                `${c.bold}\x1b[97m         ${line}${c.reset}`,
-            )
+            .map((line) => `${c.bold}\x1b[97m         ${line}${c.reset}`)
             .join('\n')}`
         : '';
 
@@ -173,9 +109,7 @@ export class LoggerService
     }
   }
 
-  private getLevelStyle(
-    level: LogLevel,
-  ): {
+  private getLevelStyle(level: LogLevel): {
     color: string;
     icon: string;
   } {

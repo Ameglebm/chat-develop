@@ -15,19 +15,11 @@ export class RedisService {
     console.log('⚡ Redis conectado');
   }
 
-  async set(
-    key: string,
-    value: unknown,
-  ) {
-    await this.redis.set(
-      key,
-      JSON.stringify(value),
-    );
+  async set(key: string, value: unknown) {
+    await this.redis.set(key, JSON.stringify(value));
   }
 
-  async get<T>(
-    key: string,
-  ): Promise<T | null> {
+  async get<T>(key: string): Promise<T | null> {
     const value = await this.redis.get(key);
 
     if (!value) {

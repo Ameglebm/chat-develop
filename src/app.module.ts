@@ -5,6 +5,7 @@ import { PrismaModule } from './infra/database/prisma.module';
 import { RedisModule } from './infra/cache/redis.module';
 import { WebsocketModule } from './infra/websocket/websocket.module';
 import { LoggerModule } from './infra/logger/logger.module';
+import { RabbitMQModule } from './infra/queue/rabbitmq.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { LoggerModule } from './infra/logger/logger.module';
     RedisModule,
     WebsocketModule,
     LoggerModule,
+    RabbitMQModule,
   ],
   controllers: [AppController],
   providers: [AppService],
