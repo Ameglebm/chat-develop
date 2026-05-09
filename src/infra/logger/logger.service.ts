@@ -4,7 +4,11 @@ import {
   Scope,
 } from '@nestjs/common';
 
-import { LOGGER_COLORS, LOGGER_CONTEXT_THEMES } from './logger.constants';
+import {
+  LOGGER_COLORS,
+  LOGGER_CONTEXT_THEMES,
+  LoggerTheme,
+} from './logger.constants';
 
 export enum LogLevel {
   SUCCESS = 'SUCCESS',
@@ -12,7 +16,15 @@ export enum LogLevel {
   WARN = 'WARN',
   ERROR = 'ERROR',
   DEBUG = 'DEBUG',
+  VERBOSE = 'VERBOSE',
 }
+
+type LogMetadata = Record<string, unknown>;
+
+const DEFAULT_THEME: LoggerTheme = {
+  badge: '◈',
+  color: LOGGER_COLORS.gray,
+};
 
 @Injectable({
   scope: Scope.TRANSIENT,
@@ -20,64 +32,67 @@ export enum LogLevel {
 export class LoggerService implements NestLoggerService {
   private context?: string;
 
-  setContext(context: string) {
+  setContext(context: string): this {
     this.context = context;
+    return this;
   }
 
-  log(message: string, metadata?: Record<string, any>) {
+  log(message: string, metadata?: LogMetadata) {
     this.writeLog(LogLevel.INFO, message, metadata);
   }
 
-  success(message: string, metadata?: Record<string, any>) {
+  success(message: string, metadata?: LogMetadata) {
     this.writeLog(LogLevel.SUCCESS, message, metadata);
   }
 
-  warn(message: string, metadata?: Record<string, any>) {
+  warn(message: string, metadata?: LogMetadata) {
     this.writeLog(LogLevel.WARN, message, metadata);
   }
 
-  debug(message: string, metadata?: Record<string, any>) {
+  debug(message: string, metadata?: LogMetadata) {
     this.writeLog(LogLevel.DEBUG, message, metadata);
   }
 
-  verbose(message: string, metadata?: Record<string, any>) {
-    this.writeLog(LogLevel.DEBUG, message, metadata);
+  verbose(message: string, metadata?: LogMetadata) {
+    this.writeLog(LogLevel.VERBOSE, message, metadata);
   }
 
-  error(message: string, trace?: string, metadata?: Record<string, any>) {
+  error(
+    message: string,
+    traceOrMeta?: string | LogMetadata,
+    metadata?: LogMetadata,
+  ) {
+    const trace = typeof traceOrMeta === 'string' ? traceOrMeta : undefined;
+
+    const meta = typeof traceOrMeta === 'object' ? traceOrMeta : metadata;
+
     this.writeLog(LogLevel.ERROR, message, {
-      ...metadata,
+      ...meta,
       ...(trace && { trace }),
     });
   }
 
-  private writeLog(
-    level: LogLevel,
-    message: string,
-    metadata?: Record<string, any>,
-  ) {
+  private writeLog(level: LogLevel, message: string, metadata?: LogMetadata) {
     const c = LOGGER_COLORS;
-
     const context = this.context ?? 'ChatDevelop';
-
-    const theme = LOGGER_CONTEXT_THEMES[context] ?? {
-      badge: '◈',
-      color: c.gray,
-    };
+    const theme: LoggerTheme =
+      (LOGGER_CONTEXT_THEMES as Record<string, LoggerTheme>)[context] ??
+      DEFAULT_THEME;
 
     const levelStyle = this.getLevelStyle(level);
 
-    const time = new Date().toISOString().split('T')[1].slice(0, 8);
+    // ✅ Sem toLocaleTimeString — seguro em qualquer container
+    const d = new Date();
+    const time = [d.getHours(), d.getMinutes(), d.getSeconds()]
+      .map((n) => n.toString().padStart(2, '0'))
+      .join(':');
 
-    const lvl = level.padEnd(7);
+    const lvl = level.padEnd(8);
 
     const line = [
       `${c.dim}${time}${c.reset}`,
-
       `${c.bold}${levelStyle.color}${levelStyle.icon} ${lvl}${c.reset}`,
-
       `${c.bold}${theme.color}${theme.badge} [${context}]${c.reset}`,
-
       `${c.bold}${c.bCyan}${message}${c.reset}`,
     ].join(' ');
 
@@ -85,7 +100,7 @@ export class LoggerService implements NestLoggerService {
       metadata && Object.keys(metadata).length > 0
         ? `\n${JSON.stringify(metadata, null, 2)
             .split('\n')
-            .map((line) => `${c.bold}\x1b[97m         ${line}${c.reset}`)
+            .map((l) => `${c.silver}         ${l}${c.reset}`)
             .join('\n')}`
         : '';
 
@@ -95,62 +110,36 @@ export class LoggerService implements NestLoggerService {
       case LogLevel.ERROR:
         console.error(output);
         break;
-
       case LogLevel.WARN:
         console.warn(output);
         break;
-
       case LogLevel.DEBUG:
+      case LogLevel.VERBOSE:
         console.debug(output);
         break;
-
       default:
         console.log(output);
     }
   }
 
-  private getLevelStyle(level: LogLevel): {
-    color: string;
-    icon: string;
-  } {
+  private getLevelStyle(level: LogLevel): { color: string; icon: string } {
     const c = LOGGER_COLORS;
 
     switch (level) {
       case LogLevel.SUCCESS:
-        return {
-          color: c.bGreen,
-          icon: '✓',
-        };
-
+        return { color: c.bGreen, icon: '✓' };
       case LogLevel.INFO:
-        return {
-          color: c.bBlue,
-          icon: 'ℹ',
-        };
-
+        return { color: c.bBlue, icon: 'ℹ' };
       case LogLevel.ERROR:
-        return {
-          color: c.bRed,
-          icon: '✖',
-        };
-
+        return { color: c.bRed, icon: '✖' };
       case LogLevel.WARN:
-        return {
-          color: c.bYellow,
-          icon: '⚠',
-        };
-
+        return { color: c.bYellow, icon: '⚠' };
       case LogLevel.DEBUG:
-        return {
-          color: c.dim,
-          icon: '·',
-        };
-
+        return { color: c.gray, icon: '·' };
+      case LogLevel.VERBOSE:
+        return { color: c.dim, icon: '»' };
       default:
-        return {
-          color: c.gray,
-          icon: '•',
-        };
+        return { color: c.gray, icon: '•' };
     }
   }
 }

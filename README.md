@@ -1,98 +1,303 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
+````md
+<div align="center">
 
 ```bash
-$ npm install
+ ██████╗██╗  ██╗ █████╗ ████████╗
+██╔════╝██║  ██║██╔══██╗╚══██╔══╝
+██║     ███████║███████║   ██║
+██║     ██╔══██║██╔══██║   ██║
+╚██████╗██║  ██║██║  ██║   ██║
+ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝
+````
+
+# Chat Develop
+
+### Realtime Backend Architecture NestJS, WebSocket, Redis, RabbitMQ
+
+Arquitetura backend moderna focada em:
+WebSocket · Mensageria · Tempo real · Escalabilidade · Infra desacoplada.
+
+---
+
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge\&logo=typescript\&logoColor=white)
+![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge\&logo=nestjs\&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge\&logo=postgresql\&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge\&logo=redis\&logoColor=white)
+![RabbitMQ](https://img.shields.io/badge/RabbitMQ-FF6600?style=for-the-badge\&logo=rabbitmq\&logoColor=white)
+![Socket.io](https://img.shields.io/badge/Socket.io-010101?style=for-the-badge\&logo=socketdotio\&logoColor=white)
+
+</div>
+
+---
+
+# 🚀 Objetivo
+
+O Chat Develop é uma arquitetura backend em tempo real construída para estudar e aplicar conceitos modernos de sistemas distribuídos:
+
+* WebSocket em tempo real
+* Mensageria com RabbitMQ
+* Cache e presença online com Redis
+* Arquitetura modular no NestJS
+* Processamento assíncrono
+* Providers desacoplados
+* Logs contextualizados
+* Estrutura escalável para microsserviços
+
+---
+
+# 🏗️ Arquitetura
+
+```txt
+Client
+   │
+   ▼
+WebSocket Gateway
+   │
+   ▼
+Services
+   │
+   ├── Redis
+   ├── RabbitMQ
+   ├── Prisma
+   └── Storage
 ```
 
-## Compile and run the project
+---
+
+# ⚡ Infraestrutura Atual
+
+| Camada   | Tecnologia        | Responsabilidade                   |
+| -------- | ----------------- | ---------------------------------- |
+| Backend  | NestJS            | Estrutura modular                  |
+| ORM      | Prisma            | Acesso ao PostgreSQL               |
+| Cache    | Redis             | Cache e presença online            |
+| Queue    | RabbitMQ          | Processamento assíncrono           |
+| Realtime | Socket.io         | Comunicação em tempo real          |
+| Storage  | Local/S3 Provider | Upload e gerenciamento de arquivos |
+| Logs     | Custom Logger     | Logs coloridos e contextualizados  |
+
+---
+
+# 📂 Estrutura de Pastas
+
+```txt
+src/
+├── common/
+├── config/
+├── infra/
+│   ├── cache/
+│   ├── database/
+│   ├── logger/
+│   ├── queue/
+│   ├── storage/
+│   └── websocket/
+├── modules/
+└── main.ts
+```
+
+---
+
+# 🐰 RabbitMQ
+
+Estrutura desacoplada com:
+
+* Publishers
+* Consumers
+* Exchanges
+* Routing Keys
+* Durable queues
+* nack/ack
+* Retry ready
+
+---
+
+# 🔌 WebSocket
+
+Sistema realtime preparado para:
+
+* salas
+* presença online
+* indicadores de digitação
+* broadcast
+* autenticação JWT
+* eventos distribuídos
+
+---
+
+# 🧠 Redis
+
+Redis utilizado para:
+
+* cache
+* sessões
+* presença online
+* heartbeat websocket
+* rate limit
+* idempotência
+
+---
+
+# 📦 Storage
+
+Provider Pattern implementado:
+
+* Local Storage
+* S3 Storage
+* fácil troca de provider
+
+---
+
+# 🎨 Logger
+
+Logger customizado com:
+
+* cores ANSI
+* contextos
+* badges
+* metadata
+* logs tipados
+* suporte enterprise
+
+---
+
+# ⚙️ Rodando o projeto
 
 ```bash
-# development
-$ npm run start
+# instalar dependências
+npm install
 
-# watch mode
-$ npm run start:dev
+# subir containers
+docker compose up -d
 
-# production mode
-$ npm run start:prod
+# rodar projeto
+npm run start:dev
 ```
 
-## Run tests
+---
 
-```bash
-# unit tests
-$ npm run test
+# 🔧 Variáveis de ambiente
 
-# e2e tests
-$ npm run test:e2e
+```env
+PORT=3000
 
-# test coverage
-$ npm run test:cov
+DATABASE_URL=
+
+REDIS_HOST=
+REDIS_PORT=
+
+RABBITMQ_URL=
 ```
 
-## Deployment
+---
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+# 🛣️ Roadmap
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## ⚙️ Infraestrutura
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+### Config
+
+* [x] ConfigModule global
+* [x] Configuração separada por contexto
+* [x] app.config
+* [x] database.config
+* [x] redis.config
+* [x] rabbitmq.config
+* [x] websocket.config
+
+### Logger
+
+* [x] Logger customizado
+* [x] Contextos por módulo
+* [x] Logs coloridos
+* [x] Levels customizados
+* [x] Metadata nos logs
+* [x] Integração com Nest Logger
+
+### Database
+
+* [x] PrismaModule
+* [x] PrismaService
+* [x] BaseRepository
+* [ ] Soft delete base
+* [ ] Transactions helper
+
+### Redis
+
+* [x] RedisModule
+* [x] RedisService
+* [x] Constantes Redis
+* [ ] Presence cache
+* [ ] Distributed locks
+
+### RabbitMQ
+
+* [x] RabbitMQModule
+* [x] RabbitMQService
+* [x] BasePublisher
+* [x] BaseConsumer
+* [x] Exchanges
+* [x] Queues
+* [x] Routing keys
+* [x] Mensagens persistentes
+* [ ] Retry strategy
+* [ ] Dead letter queue
+
+### Storage
+
+* [x] StorageModule
+* [x] StorageService
+* [x] LocalStorageProvider
+* [x] S3StorageProvider
+* [x] Interface de arquivos
+* [ ] Upload multipart
+* [ ] File validation
+* [ ] CDN integration
+
+---
+
+## 🔌 WebSocket
+
+### Gateway
+
+* [x] AppGateway
+* [x] WebsocketService
+* [x] Eventos base
+* [x] Logs de conexão
+* [ ] JWT handshake
+* [ ] Rooms
+* [ ] Presence system
+* [ ] Typing events
+* [ ] Read receipts
+
+---
+
+## 🧩 Common
+
+> Ainda não iniciados
+
+---
+
+## 📦 Modules
+
+> Ainda não iniciados
+
+---
+
+## 🧪 Qualidade
+
+> Ainda não iniciados
+
+---
+
+## ⚙️ DevOps
+
+> Ainda não iniciados
+
+---
+
+<div align="center">
+
+Buildando arquitetura realtime com NestJS ⚡
+
+</div>
 ```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).

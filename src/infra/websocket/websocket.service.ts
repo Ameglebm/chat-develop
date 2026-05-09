@@ -1,28 +1,48 @@
 import { Injectable } from '@nestjs/common';
 
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
+
+import { LoggerService } from '../logger/logger.service';
 
 @Injectable()
 export class WebsocketService {
-  private server: Server;
+  private server!: Server;
 
-  setServer(server: Server) {
-    this.server = server;
+  constructor(private readonly logger: LoggerService) {
+    this.logger.setContext('WebsocketService');
   }
 
-  getServer() {
+  setServer(server: Server): void {
+    this.server = server;
+    this.logger.success('Server registrado');
+  }
+
+  private getServerOrThrow(): Server {
+    if (!this.server) {
+      throw new Error('WebSocket server não inicializado');
+    }
     return this.server;
   }
 
-  emit(event: string, data: unknown) {
-    this.server.emit(event, data);
+  getServer(): Server {
+    return this.getServerOrThrow();
   }
 
-  emitToRoom(room: string, event: string, data: unknown) {
-    this.server.to(room).emit(event, data);
+  emit(event: string, data: unknown): void {
+    this.getServerOrThrow().emit(event, data);
   }
 
-  emitToSocket(socketId: string, event: string, data: unknown) {
-    this.server.to(socketId).emit(event, data);
+  emitToRoom(room: string, event: string, data: unknown): void {
+    this.getServerOrThrow().to(room).emit(event, data);
+  }
+
+  joinRoom(client: Socket, room: string): void {
+    client.join(room);
+    this.logger.debug(`Socket ${client.id} entrou na sala ${room}`);
+  }
+
+  leaveRoom(client: Socket, room: string): void {
+    client.leave(room);
+    this.logger.debug(`Socket ${client.id} saiu da sala ${room}`);
   }
 }

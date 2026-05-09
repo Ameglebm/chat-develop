@@ -4,26 +4,30 @@ import { PrismaClient } from '@prisma/client';
 
 import { PrismaPg } from '@prisma/adapter-pg';
 
+import { LoggerService } from '../logger/logger.service';
+
 @Injectable()
 export class PrismaService
   extends PrismaClient
   implements OnModuleInit, OnModuleDestroy
 {
-  constructor() {
+  constructor(private readonly logger: LoggerService) {
     const adapter = new PrismaPg({
       connectionString: process.env.DATABASE_URL!,
     });
 
     super({ adapter });
+
+    this.logger.setContext('PrismaService');
   }
 
-  async onModuleInit() {
+  async onModuleInit(): Promise<void> {
     await this.$connect();
-
-    console.log('🗄️ Prisma conectado');
+    this.logger.success('Conectado ao banco de dados');
   }
 
-  async onModuleDestroy() {
+  async onModuleDestroy(): Promise<void> {
     await this.$disconnect();
+    this.logger.warn('Conexão com banco de dados encerrada');
   }
 }

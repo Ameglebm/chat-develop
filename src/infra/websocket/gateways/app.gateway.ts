@@ -6,36 +6,42 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 
-import { Logger } from '@nestjs/common';
-
 import { Server, Socket } from 'socket.io';
+
+import { LoggerService } from '../../logger/logger.service';
 
 import { WebsocketService } from '../websocket.service';
 
 @WebSocketGateway({
-  cors: true,
+  cors: {
+    origin: process.env.WS_CORS_ORIGIN ?? '*',
+  },
+  pingInterval: 25000,
+  pingTimeout: 10000,
 })
 export class AppGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  private readonly logger = new Logger(AppGateway.name);
-
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly websocketService: WebsocketService) {}
+  constructor(
+    private readonly websocketService: WebsocketService,
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(AppGateway.name);
+  }
 
   afterInit() {
     this.websocketService.setServer(this.server);
-
-    this.logger.log('🔥 Websocket iniciado');
+    this.logger.success('Websocket iniciado');
   }
 
   handleConnection(client: Socket) {
-    this.logger.log(`🟢 Cliente conectado: ${client.id}`);
+    this.logger.log(`Cliente conectado: ${client.id}`);
   }
 
   handleDisconnect(client: Socket) {
-    this.logger.log(`🔴 Cliente desconectado: ${client.id}`);
+    this.logger.warn(`Cliente desconectado: ${client.id}`);
   }
 }
