@@ -4,20 +4,32 @@ services:
 
     container_name: chatdevelop_app
 
+    restart: unless-stopped
+
     ports:
       - "3000:3000"
 
     volumes:
       - .:/app
+      - /app/node_modules
 
     depends_on:
       - postgres
       - redis
+      - rabbitmq
 
     environment:
+      NODE_ENV: development
+
+      PORT: 3000
+
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/chatdevelop
+
       REDIS_HOST: redis
       REDIS_PORT: 6379
+
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+
       JWT_SECRET: chatdevelop_secret
 
     command: sh -c "npm install && npx prisma generate && npm run start:dev"
@@ -50,5 +62,21 @@ services:
     ports:
       - "6379:6379"
 
+  rabbitmq:
+    image: rabbitmq:3-management
+
+    container_name: chatdevelop_rabbitmq
+
+    restart: unless-stopped
+
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
 volumes:
   postgres_data:
+
