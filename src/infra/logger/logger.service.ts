@@ -1,7 +1,6 @@
 import {
   Injectable,
   LoggerService as NestLoggerService,
-  Scope,
 } from '@nestjs/common';
 
 import {
@@ -26,9 +25,7 @@ const DEFAULT_THEME: LoggerTheme = {
   color: LOGGER_COLORS.gray,
 };
 
-@Injectable({
-  scope: Scope.TRANSIENT,
-})
+@Injectable()
 export class LoggerService implements NestLoggerService {
   private context?: string;
 

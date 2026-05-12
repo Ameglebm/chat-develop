@@ -7,8 +7,6 @@ import rabbitmqConfig from './config/rabbitmq.config';
 import redisConfig from './config/redis.config';
 import websocketConfig from './config/websocket.config';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { LoggerModule } from './infra/logger/logger.module';
 import { PrismaModule } from './infra/database/prisma.module';
 import { RedisModule } from './infra/cache/redis.module';
@@ -35,7 +33,5 @@ import { StorageModule } from './infra/storage/storage.module';
     WebsocketModule,
     StorageModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
