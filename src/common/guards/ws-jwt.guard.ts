@@ -25,9 +25,7 @@ export class WsJwtGuard
       );
     }
 
-    /**
-     * JWT validation futuramente
-     */
+     // JWT validation futuramente
 
     return true;
   }
